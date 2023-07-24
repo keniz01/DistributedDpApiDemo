@@ -13,7 +13,8 @@ The current docker-compose.override.yml file is shown below.
  services:
     distributeddpapidemo:  
         environment:
-            - ASPNETCORE_Kestrel__Certificates__Default__Password=xxxxxxxxxxx
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=<password here>
+	    - ConnectionStrings__DefaultContext=user id=postgres;password=<password here>;host=host.docker.internal;port=5432;database=postgres
 ```
 
 ### References
