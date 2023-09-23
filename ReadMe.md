@@ -6,6 +6,12 @@ This application uses docker compose override (docker-compose.override.yml) file
 
 During the initial development phase, there were issues using a self-signed certificate while running the web api both in bare-metal mode and in docker. This is a well-documented issue - see [here](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/self-signed-certificates-guide).
 
+### Getting started
+
+To run the application, make sure that docker desktop is running on the machine.
+
+On the command line, fire up `docker compose up` and browse to `http://localhost:4000/swagger/index.html` to view the Swagger documentation.
+
 The current docker-compose.override.yml file is shown below.
 
 ```
