@@ -9,28 +9,26 @@ namespace DistributedDpApiDemo.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CredentialController : ControllerBase
+public class FileSystemKeyManagementController : ControllerBase
 {
     private readonly IDataProtector _dataProtector;
-    private readonly string _connectionString = string.Empty;
+    private readonly IConfiguration _configuration;
 
-    public CredentialController(IDataProtectionProvider provider, IConfiguration configuration)
+    public FileSystemKeyManagementController(IDataProtectionProvider provider, IConfiguration configuration)
     {
         _dataProtector = provider.CreateProtector("UhHZr-yjMEW_lsCDUAD-JgQsId3WLmZkeMc4GoHxJXOQ");
-        _ = configuration ?? throw new ArgumentNullException(nameof(configuration));
-        _connectionString = configuration.GetConnectionString("DefaultContext")!;
+        _configuration = configuration;
     }
 
     [HttpPost()]
     public async Task<IResult> AddUserCredentialsAsync([Required]AddCredentialsRequest request)
     {
-        using var connection = new NpgsqlConnection(_connectionString);
-        await connection.OpenAsync();
         var credentials = new Credentials
         {
             SecretKey = _dataProtector.Protect(request.SecretKey)
         };
-
+        
+        var connection = await CreateConnection(CancellationToken.None);
         var id = await connection.InsertAsync(credentials);
         return Results.Ok(id);
     }
@@ -38,8 +36,7 @@ public class CredentialController : ControllerBase
     [HttpGet()]
     public async Task<IResult> GetUserCredentialsAsync([FromQuery] GetCredentialsRequest request)
     {
-        using var connection = new NpgsqlConnection(_connectionString);
-        await connection.OpenAsync();
+        var connection = await CreateConnection(CancellationToken.None);
         var response = await connection.QueryAsync<Credentials>(m => m.Id == request.Id);
         var credentials = new GetCredentialsResponse
         {
@@ -49,5 +46,13 @@ public class CredentialController : ControllerBase
         };
 
         return Results.Ok(credentials);
+    }
+
+    private async Task<NpgsqlConnection> CreateConnection(CancellationToken cancellationToken)
+    {
+        var connectionString = _configuration.GetConnectionString("DefaultContext")!;
+        var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+        return connection;
     }
 }

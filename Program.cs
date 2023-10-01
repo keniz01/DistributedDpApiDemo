@@ -3,6 +3,7 @@
 //dotnet add package Npgsql
 
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
 using RepoDb;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var keysFolder = Path.Combine(builder.Environment.ContentRootPath, "keys");
+builder.Services.AddDbContext<DataProtectionKeyContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultContext"));
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    options.EnableSensitiveDataLogging();
+});
 builder.Services.AddDataProtection()
+    //.PersistKeysToDbContext<DataProtectionKeyContext>()
     .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
     .SetApplicationName("DistributedDpApiDemo");
 
