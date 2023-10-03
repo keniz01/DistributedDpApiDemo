@@ -1,0 +1,6 @@
+kubectl delete -f deployment.yaml
+
+
+
+References
+https://loft.sh/blog/docker-compose-to-kubernetes-step-by-step-migration/

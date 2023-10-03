@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.service.type: LoadBalancer
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: distributeddpapidemo
+  name: distributeddpapidemo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      io.kompose.service: distributeddpapidemo
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.service.type: LoadBalancer
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: distributeddpapidemo
+    spec:
+      containers:
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+              value: /https/aspnetapp.pfx
+            - name: ASPNETCORE_URLS
+              value: https://+:6001
+          image: distributeddpapidemo
+          name: distributeddpapidemo
+          ports:
+            - containerPort: 6001
+          resources: {}
+          volumeMounts:
+            - mountPath: /https
+              name: distributeddpapidemo-claim0
+              readOnly: true
+            - mountPath: /app/keys
+              name: distributeddpapidemo-claim1
+      restartPolicy: Always
+      volumes:
+        - name: distributeddpapidemo-claim0
+          persistentVolumeClaim:
+            claimName: distributeddpapidemo-claim0
+            readOnly: true
+        - name: distributeddpapidemo-claim1
+          persistentVolumeClaim:
+            claimName: distributeddpapidemo-claim1
+status: {}
