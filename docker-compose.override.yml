@@ -1,0 +1,6 @@
+version: '3.4'
+services:
+  distributeddpapidemo:  
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Versuv10us
+      - ConnectionStrings__DefaultContext=user id=_____;password=_____;host=host.docker.internal;port=5432;database=____

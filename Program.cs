@@ -1,6 +1,10 @@
 //dotnet add package Microsoft.AspNetCore.DataProtection
 //dotnet add package RepoDb.PostgreSql
 //dotnet add package Npgsql
+//dotnet add package Microsoft.EntityFrameworkCore
+//dotnet add package Microsoft.EntityFrameworkCore.Design
+//dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL 
+//dotnet add package Microsoft.AspNetCore.DataProtection.EntityFrameworkCore
 
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
