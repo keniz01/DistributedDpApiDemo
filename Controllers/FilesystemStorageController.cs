@@ -9,12 +9,12 @@ namespace DistributedDpApiDemo.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class FileSystemKeyManagementController : ControllerBase
+public class FilesystemStorageController : ControllerBase
 {
     private readonly IDataProtector _dataProtector;
     private readonly IConfiguration _configuration;
 
-    public FileSystemKeyManagementController(IDataProtectionProvider provider, IConfiguration configuration)
+    public FilesystemStorageController(IDataProtectionProvider provider, IConfiguration configuration)
     {
         _dataProtector = provider.CreateProtector("secure-app");
         _configuration = configuration;
