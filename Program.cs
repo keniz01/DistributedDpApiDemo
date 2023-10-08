@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using RepoDb;
 using System;
 using System.Diagnostics.Metrics;
+using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,9 +31,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     options.EnableSensitiveDataLogging();
 });
+
+var certificate = FindCertificate("deeb4fdc0470fb8a3dcabc1aa6614249661987cd");
+
 builder.Services.AddDataProtection()
-    //.PersistKeysToDbContext<DataProtectionKeyContext>()
+    .PersistKeysToDbContext<ApplicationDbContext>()
     .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
+    //.ProtectKeysWithCertificate(certificate)
     .SetApplicationName("DistributedDpApiDemo");
 
 GlobalConfiguration
@@ -57,3 +62,17 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static X509Certificate2 FindCertificate(string serialNumber)
+{
+    return Find(serialNumber, StoreLocation.CurrentUser) ?? Find(serialNumber, StoreLocation.LocalMachine);
+}
+static X509Certificate2 Find(string serialNumber, StoreLocation location)
+{
+    using (var store = new X509Store(location))
+    {
+        store.Open(OpenFlags.OpenExistingOnly);
+        var certs = store.Certificates.Find(X509FindType.FindBySerialNumber, serialNumber, true);
+        return certs.OfType<X509Certificate2>().First();
+    }
+}
