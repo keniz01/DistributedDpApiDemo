@@ -9,7 +9,10 @@ During the initial development phase, there were issues using a self-signed cert
 ### Getting started
 
 To run the application, make sure that docker desktop is running on the machine.
-
+Create a self-signed certificate using
+```
+dotnet dev-certs https -ep "$env:USERPROFILE\.aspnet\https\aspnetapp.pfx"  -p <password here>
+```
 On the command line, fire up `docker compose up` and browse to `http://localhost:4000/swagger/index.html` to view the Swagger documentation.
 
 The current docker-compose.override.yml file is shown below.
