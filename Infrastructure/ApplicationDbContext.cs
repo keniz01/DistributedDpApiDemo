@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataProtectionApi.Infrastructure
 {
-    public class ApplicationContext : DbContext, IDataProtectionKeyContext
+    public class ApplicationDbContext : DbContext, IDataProtectionKeyContext
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
 
         public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();

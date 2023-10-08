@@ -11,6 +11,8 @@ using DataProtectionApi.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using RepoDb;
+using System;
+using System.Diagnostics.Metrics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var keysFolder = Path.Combine(builder.Environment.ContentRootPath, "keys");
-builder.Services.AddDbContext<ApplicationContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultContext"));
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
@@ -45,6 +47,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+using var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+context.Database.Migrate();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
