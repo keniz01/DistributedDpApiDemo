@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DistributedDpApiDemo.Models;
 
 [Table("credentials")]
-public class Credentials
+public class Credential
 {
     [Column("id")]
     public int Id {get; set;}

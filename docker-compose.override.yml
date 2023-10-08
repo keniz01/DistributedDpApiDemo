@@ -2,5 +2,10 @@ version: '3.4'
 services:
   distributeddpapidemo:  
     environment:
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=$CREDENTIAL_PLACEHOLDER$
-      - ConnectionStrings__DefaultContext=user id=postgres;password=$CREDENTIAL_PLACEHOLDER$;host=host.docker.internal;port=5432;database=postgres
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=___________
+      - ConnectionStrings__DefaultContext=user id=postgres;password=______;host=host.docker.internal;port=5432;database=postgres
+  postgres-db:
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=________
+      - POSTGRES_DB=postgres

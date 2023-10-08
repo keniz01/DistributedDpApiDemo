@@ -2,7 +2,7 @@
 version: '3.4'
 services:
   distributeddpapidemo:
-    image: distributeddpapidemo
+    #image: distributeddpapidemo
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -26,7 +26,17 @@ services:
       - distributeddpapidemo
     ports:
       - "4000:4000"
+  postgres-db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - '5432:5432'
+    volumes: 
+      - postgres-db:/var/lib/postgresql/data
 networks:
   default:
     driver: bridge
-    name: test     
+    name: test    
+volumes:
+  postgres-db:
+    driver: local    

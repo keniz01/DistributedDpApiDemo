@@ -5,7 +5,9 @@
 //dotnet add package Microsoft.EntityFrameworkCore.Design
 //dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL 
 //dotnet add package Microsoft.AspNetCore.DataProtection.EntityFrameworkCore
+//
 
+using DataProtectionApi.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using RepoDb;
@@ -20,7 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var keysFolder = Path.Combine(builder.Environment.ContentRootPath, "keys");
-builder.Services.AddDbContext<DataProtectionKeyContext>(options =>
+builder.Services.AddDbContext<ApplicationContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultContext"));
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
