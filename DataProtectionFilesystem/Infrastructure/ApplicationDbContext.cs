@@ -1,8 +1,8 @@
-using DistributedDpApiDemo.Models;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SecretManagement.DataProtectionFilesystem.Models;
 
-namespace DataProtectionApi.Infrastructure
+namespace SecretManagement.DataProtectionFilesystem.Infrastructure
 {
     public class ApplicationDbContext : DbContext, IDataProtectionKeyContext
     {

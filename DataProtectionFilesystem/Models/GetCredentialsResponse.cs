@@ -1,4 +1,4 @@
-namespace DistributedDpApiDemo.Models;
+namespace SecretManagement.DataProtectionFilesystem.Models;
 
 public class GetCredentialsResponse
 {

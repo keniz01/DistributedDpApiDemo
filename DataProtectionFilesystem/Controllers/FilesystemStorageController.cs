@@ -1,11 +1,11 @@
-using DistributedDpApiDemo.Models;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using RepoDb;
+using SecretManagement.DataProtectionFilesystem.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace DistributedDpApiDemo.Controllers;
+namespace SecretManagement.DataProtectionFilesystem.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

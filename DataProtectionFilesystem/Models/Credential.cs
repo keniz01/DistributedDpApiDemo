@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DistributedDpApiDemo.Models;
+namespace SecretManagement.DataProtectionFilesystem.Models;
 
 [Table("credentials")]
 public class Credential
