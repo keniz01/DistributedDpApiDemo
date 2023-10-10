@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SecretManagement.DataProtectionCertificate.Models;
 using SecretManagement.Shared;
+using SecretManagement.Shared.Helpers;
 
 namespace SecretManagement.DataProtectionCertificate.Controllers
 {

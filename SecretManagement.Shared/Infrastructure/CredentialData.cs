@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SecretManagement.Shared
+namespace SecretManagement.Shared.Infrastructure
 {
     [Table("credentials")]
     public class CredentialData

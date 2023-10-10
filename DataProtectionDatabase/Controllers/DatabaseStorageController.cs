@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using RepoDb;
-using SecretManagement.DataProtectionFilesystem.Models;
+using SecretManagement.Shared.Entities;
+using SecretManagement.Shared.Infrastructure;
+using SecretManagement.Shared.Models.Requests;
+using SecretManagement.Shared.Models.Responses;
 using System.ComponentModel.DataAnnotations;
 
 namespace SecretManagement.DataProtectionDatabase.Controllers;
@@ -11,48 +14,37 @@ namespace SecretManagement.DataProtectionDatabase.Controllers;
 [Route("api/[controller]")]
 public class DatabaseStorageController : ControllerBase
 {
-    private readonly IDataProtector _dataProtector;
-    private readonly IConfiguration _configuration;
+    private readonly IApplicationRepository _applicationRepository;
 
-    public DatabaseStorageController(IDataProtectionProvider provider, IConfiguration configuration)
+    public DatabaseStorageController(
+        IApplicationRepository applicationRepository)
     {
-        _dataProtector = provider.CreateProtector("secure-app");
-        _configuration = configuration;
+        _applicationRepository = applicationRepository;
     }
 
     [HttpPost()]
-    public async Task<IResult> AddUserCredentialsAsync([Required]AddCredentialsRequest request)
+    public async Task<IResult> AddUserCredentialsAsync([Required] AddCredentialsRequest request, CancellationToken cancellationToken)
     {
-        var credentials = new Credential
+        var credential = new Credential
         {
-            SecretKey = _dataProtector.Protect(request.SecretKey)
+            PainTextSecretKey = request.SecretKey
         };
-        
-        var connection = await CreateConnection(CancellationToken.None);
-        var id = await connection.InsertAsync(credentials);
+
+        var id = await _applicationRepository.AddAsync(credential, cancellationToken);
         return Results.Ok(id);
     }
 
     [HttpGet()]
-    public async Task<IResult> GetUserCredentialsAsync([FromQuery] GetCredentialsRequest request)
+    public async Task<IResult> GetUserCredentialsAsync([FromQuery] GetCredentialRequest request, CancellationToken cancellationToken)
     {
-        var connection = await CreateConnection(CancellationToken.None);
-        var response = await connection.QueryAsync<Credential>(m => m.Id == request.Id);
-        var credentials = new GetCredentialsResponse
+        var response = await _applicationRepository.GetAsync(request.Id, cancellationToken);
+        var credentialResponse = new GetCredentialResponse
         {
-            Id = response.First().Id,
-            SecretKey = response.First().SecretKey,
-            PlainTextSecretKey = _dataProtector.Unprotect(response.First().SecretKey)
+            Id = response.Id,
+            SecretKey = response.CipheredSecretKey,
+            PlainTextSecretKey = response.PainTextSecretKey
         };
 
-        return Results.Ok(credentials);
-    }
-
-    private async Task<NpgsqlConnection> CreateConnection(CancellationToken cancellationToken)
-    {
-        var connectionString = _configuration.GetConnectionString("DefaultContext")!;
-        var connection = new NpgsqlConnection(connectionString);
-        await connection.OpenAsync(cancellationToken);
-        return connection;
+        return Results.Ok(credentialResponse);
     }
 }

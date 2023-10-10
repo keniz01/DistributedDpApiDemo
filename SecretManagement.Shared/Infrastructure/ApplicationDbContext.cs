@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SecretManagement.DataProtectionFilesystem.Models;
 
-namespace SecretManagement.DataProtectionDatabase.Infrastructure
+namespace SecretManagement.Shared.Infrastructure
 {
     public class ApplicationDbContext : DbContext, IDataProtectionKeyContext
     {
@@ -10,6 +9,6 @@ namespace SecretManagement.DataProtectionDatabase.Infrastructure
         : base(options) { }
 
         public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
-        public DbSet<Credential> Credentials => Set<Credential>();
+        public DbSet<CredentialData> Credentials => Set<CredentialData>();
     }
 }

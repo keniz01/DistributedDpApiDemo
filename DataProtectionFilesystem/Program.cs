@@ -10,8 +10,8 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using RepoDb;
-using SecretManagement.DataProtectionFilesystem.Helpers;
-using SecretManagement.DataProtectionFilesystem.Infrastructure;
+using SecretManagement.Shared.Helpers;
+using SecretManagement.Shared.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
